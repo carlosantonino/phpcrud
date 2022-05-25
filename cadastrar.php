@@ -14,8 +14,30 @@
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if(!empty($dados['CadUsuario'])){
             // var_dump($dados);
-            $query_usuario = "INSERT INTO usuarios (nome , email) VALUES ('".$dados['nome']."', '".$dados['email']."')";
-            // Parei aqui Aula CRUD  parei no tempo 23:37
+
+            $empty_input = false;
+
+            $dados = array_map('trim', $dados);
+            if(in_array("", $dados)){
+                $empty_input = true;
+                echo "Necessário preencher todos os campos";
+            } elseif(!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)){
+                $empty_input = true;
+                echo "Necessario preencher com email válido.";
+            }
+            // var_dump($dados);
+            if(!$empty_input){
+                $query_usuario = "INSERT INTO usuarios (nome , email) VALUES (:nome, :email)";
+                $cad_usuario = $conn -> prepare($query_usuario);
+                $cad_usuario->bindParam(':nome', $dados['nome'], PDO::PARAM_STR);
+                $cad_usuario->bindParam(':email', $dados['email'], PDO::PARAM_STR);
+                $cad_usuario -> execute();                
+                if($cad_usuario->rowCount()){
+                    echo "<p style='color:green'>Usuario cadastrado com sucesso</p>";
+                } else {
+                    echo "Erro, usuário não foi cadastrado com sucesso";
+                }
+            }          
             
         }
 
