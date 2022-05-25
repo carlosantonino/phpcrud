@@ -1,9 +1,9 @@
 <?php 
 
     $host = "localhost";
-    $user = "carlosc";
-    $pass = "6j@fbWtFQ0cJk3sV";
-    $dbname = "celke";
+    $user = "";
+    $pass = "";
+    $dbname = "";
     $port = 3306;
 
     // conexão com a porta
